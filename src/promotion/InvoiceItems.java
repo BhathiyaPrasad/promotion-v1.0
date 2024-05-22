@@ -1,7 +1,7 @@
 package promotion;
 
 // Uncomment and correct the package if you have a database connection class
-import connection.database;
+// import connection.database;
 
 public class InvoiceItems {
 
@@ -88,7 +88,7 @@ public class InvoiceItems {
         // Example usage
         InvoiceItems item = new InvoiceItems(1, "Item_Name", 30, 100.0);
         int itemId = 1;
-        int quantity = 60;
+        int quantity = 100;
 
         double discountedPrice = item.calculateWholesaleDiscount(itemId, quantity);
         System.out.println("Total price after discount: " + discountedPrice);
