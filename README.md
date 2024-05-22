@@ -9,12 +9,13 @@ CREATE TABLE `promotion` (
 PRIMARY KEY(`Promo_ID`)
 );
 
-            DROP TABLE IF EXISTS `promotion_items`;
+ 
+DROP TABLE IF EXISTS `promotion_items`;
 CREATE TABLE `promotion_items` (
-`Promo_ID` INT NOT NULL AUTO_INCREMENT,
-`Item_ID` TEXT,
-`Active` INT,
-`Created_Date` TEXT,
-`Created_Time` TEXT,
-PRIMARY KEY(`Promo_ID`)
+	`Promo_ID`	INT NOT NULL AUTO_INCREMENT,
+    `Item_ID`	TEXT,
+	`Qty`	double,
+	`Discount`	double,
+	`DiscType`	TEXT,
+	PRIMARY KEY(`Promo_ID`)
 );
