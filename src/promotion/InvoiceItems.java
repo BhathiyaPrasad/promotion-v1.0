@@ -96,7 +96,7 @@ public class InvoiceItems {
 
     public static void main(String[] args) {
         // Example usage
-        InvoiceItems item = new InvoiceItems(1, "Item_Name", 3, 100.0);
+        InvoiceItems item = new InvoiceItems(1, "Item_Name", 1, 100.0);
         int itemId = 1;
         int quantity = 3;
 
