@@ -75,20 +75,20 @@ public class InvoiceItems {
     }
 
     private double getDiscountRate(int quantity) {
-        if (quantity >= 1) {
-            return 0.0; // 20% discount for 100 or more items
-        } else if (quantity >= 2) {
-            return 0.05; // 10% discount for 50 or more items
-        } else if (quantity >= 3) {
-            return 0.10; // 10% discount for 50 or more items
+        if (quantity == 1) {
+            return 0.0; // 0% discount for 100 or more items
+        } else if (quantity == 2) {
+            return 0.05; // 5% discount
+        } else if (quantity == 3) {
+            return 0.10; // 10% discount
         } else if (quantity >= 4 && quantity <= 5) {
-            return 0.15; // 10% discount for 50 or more items
+            return 0.15; // 15% discount
         } else if (quantity >= 5 && quantity <= 10) {
-            return 0.20; // 10% discount for 50 or more items
+            return 0.20; // 20% discount
         } else if (quantity >= 10 && quantity <= 25) {
-            return 0.25; // 10% discount for 50 or more items
+            return 0.25; // 25% discount
         } else if (quantity > 25) {
-            return 0.30; // 10% discount for 50 or more items
+            return 0.40; // 40% discount
         } else {
             return 0.0; // No discount for less than 50 items
         }
@@ -96,9 +96,9 @@ public class InvoiceItems {
 
     public static void main(String[] args) {
         // Example usage
-        InvoiceItems item = new InvoiceItems(1, "Item_Name", 30, 100.0);
+        InvoiceItems item = new InvoiceItems(1, "Item_Name", 3, 100.0);
         int itemId = 1;
-        int quantity = 100;
+        int quantity = 3;
 
         double discountedPrice = item.calculateWholesaleDiscount(itemId, quantity);
         System.out.println("Total price after discount: " + discountedPrice);
