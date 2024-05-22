@@ -75,10 +75,20 @@ public class InvoiceItems {
     }
 
     private double getDiscountRate(int quantity) {
-        if (quantity >= 100) {
-            return 0.20; // 20% discount for 100 or more items
-        } else if (quantity >= 50) {
+        if (quantity >= 1) {
+            return 0.0; // 20% discount for 100 or more items
+        } else if (quantity >= 2) {
+            return 0.05; // 10% discount for 50 or more items
+        } else if (quantity >= 3) {
             return 0.10; // 10% discount for 50 or more items
+        } else if (quantity >= 4 && quantity <= 5) {
+            return 0.15; // 10% discount for 50 or more items
+        } else if (quantity >= 5 && quantity <= 10) {
+            return 0.20; // 10% discount for 50 or more items
+        } else if (quantity >= 10 && quantity <= 25) {
+            return 0.25; // 10% discount for 50 or more items
+        } else if (quantity > 25) {
+            return 0.30; // 10% discount for 50 or more items
         } else {
             return 0.0; // No discount for less than 50 items
         }
