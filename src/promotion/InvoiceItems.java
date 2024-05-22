@@ -132,6 +132,8 @@ public class InvoiceItems {
         } else {
             return 0.0; // No discount
         }
+
+        ResultSet res1 =DB.Search("Select * From promotion_items pi" + "JOIN promotion pro on pi.promo_id = pro.promo_id" + "WHERE promotion.Active = 1 AND pi.Item_ID" + "AND pi.Qty)
     }
 
     public static void main(String[] args) {
