@@ -11,9 +11,10 @@
  
              DROP TABLE IF EXISTS `promotion_items`;
              CREATE TABLE `promotion_items` (
-	    `Promo_ID`	INT NOT NULL AUTO_INCREMENT,
-            `Item_ID`	TEXT,
-	    `Qty`	double,
-	    `Discount`	double,
-	    `DiscType`	TEXT,
-	     PRIMARY KEY(`Promo_ID`));
+            `Promo_ID` INT NOT NULL AUTO_INCREMENT,
+             `Item_ID` TEXT,
+             `Qty` DOUBLE,
+             `Discount` DOUBLE,
+             `DiscType` TEXT,
+			  PRIMARY KEY (`Promo_ID`));
+
