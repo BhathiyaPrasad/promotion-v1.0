@@ -16,5 +16,5 @@
              `Qty` DOUBLE,
              `Discount` DOUBLE,
              `DiscType` TEXT,
-			  PRIMARY KEY (`Promo_ID`));
+	      PRIMARY KEY (`Promo_ID`));
 
