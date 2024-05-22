@@ -1,0 +1,36 @@
+private void AddIntoSaleJtble() {
+        String ItemID = "00100";
+        double SalePrice = 2500.00;
+        double ItemQty = 20;
+        
+        //Call into Promotion method
+        double GiventDiscount = ReadPromotion(ItemID, SalePrice, ItemQty);
+        
+        System.out.println("== AddIntoSaleJtble -> ItemID: " + ItemID + " | SalePrice: " + SalePrice + " | ItemQty: " + ItemQty + " | Discount: " + GiventDiscount);
+        //normla process
+    }
+
+    private double ReadPromotion(String ItemID, double SalePrice, double ItemQty) {
+        double Discount = 0.0;
+        try {
+            //Create DB connection and connect into db
+
+            //Get result from DB
+            ResultSet res1 = DB.Search("SELECT * FROM promotion_items pi "
+                    + "JOIN promotion pro ON pro.ID = pi.ID "
+                    + "WHERE promotion.Active = 1 AND pi.ItemID = '" + ItemID + "' AND pi.Qty >= '" + ItemQty + "' ORDER BY pi.Qty ASC LIMIT 1 ");
+            //Read result
+            while (res1.next()) {
+                if (res1.getString("DiscType").equals("PERCENTAGE")) {
+                    Discount = (SalePrice / 100) * res1.getDouble("Discount");
+                } else {
+                    Discount = res1.getDouble("Discount");
+                }
+            }
+            System.out.println("== ReadPromotion -> ItemID: " + ItemID + " | SalePrice: " + SalePrice + " | ItemQty: " + ItemQty + " | Discount: " + Discount);
+
+        } catch (Exception e) {
+            System.out.println("ERROR : " + e);
+        }
+        return Discount;
+    }
