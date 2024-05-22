@@ -64,7 +64,7 @@ public class InvoiceItems {
         // Get item price from the database
         double itemPrice = getItemPriceFromDatabase(itemId);
 
-        System.out.println("Item_ID" + itemId + "Item_Price : " + itemPrice);
+        System.out.println("Item_ID :" + itemId + "Item_Price : " + itemPrice);
         // Get discount rate based on quantity (hardcoded for simplicity)
         double discountRate = getDiscountRate(quantity);
 
