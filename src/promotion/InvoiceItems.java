@@ -5,14 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
-import connection.database; // Ensure the correct package import
+import connection.database;
 
 public class InvoiceItems {
 
     private String id;
     private String name;
     private int age;
-    private double price; // Adding the price field
+    private double price;
 
     // Constructor
     public InvoiceItems(String id, String name, int age, double price) {
@@ -61,56 +61,28 @@ public class InvoiceItems {
     }
 
     public double calculateWholesaleDiscount(String itemId, int quantity) {
-        // Get item price from the database
         double itemPrice = getItemPriceFromDatabase(itemId);
-
-        System.out.println("Item_ID :" + itemId + "Item_Price : " + itemPrice);
-        // Get discount rate based on quantity (hardcoded for simplicity)
+        System.out.println("Item_ID: " + itemId + " Item_Price: " + itemPrice);
         double discountRate = getDiscountRate(quantity);
-
         double totalPrice = itemPrice * quantity;
         double discount = totalPrice * discountRate;
-
         double discountedPrice = totalPrice - discount;
         return discountedPrice;
     }
 
     private double getItemPriceFromDatabase(String itemId) {
         double itemPrice = 0.0;
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            // Get database connection
-            conn = database.getConnection();
-
-            // Prepare and execute SQL query
-            String sql = "SELECT Sales_Price FROM items WHERE item_id = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, itemId); // Set the itemId parameter
-            rs = pstmt.executeQuery();
-
-            // Extract item price from result set
-            if (rs.next()) {
-                itemPrice = rs.getDouble("Sales_Price");
+        try (Connection conn = database.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement("SELECT Sales_Price FROM items WHERE item_id = ?")) {
+            pstmt.setString(1, itemId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    itemPrice = rs.getDouble("Sales_Price");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            // Close resources
-            try {
-                if (rs != null)
-                    rs.close();
-                if (pstmt != null)
-                    pstmt.close();
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-
         return itemPrice;
     }
 
@@ -132,41 +104,70 @@ public class InvoiceItems {
         } else {
             return 0.0; // No discount
         }
+    }
 
-        ResultSet res1 =DB.Search("Select * From promotion_items pi" + "JOIN promotion pro on pi.promo_id = pro.promo_id" + "WHERE promotion.Active = 1 AND pi.Item_ID" + "AND pi.Qty)
+    public void addIntoSaleJtble() {
+        String itemId = "00100";
+        double salePrice = 2500.00;
+        double itemQty = 20;
+
+        // Call into Promotion method
+        double givenDiscount = readPromotion(itemId, salePrice, itemQty);
+
+        System.out.println("== AddIntoSaleJtble -> ItemID: " + itemId + " | SalePrice: " + salePrice + " | ItemQty: "
+                + itemQty + " | Discount: " + givenDiscount);
+        // Normal process
+    }
+
+    private double readPromotion(String itemId, double salePrice, double itemQty) {
+        double discount = 0.0;
+        try (Connection conn = database.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(
+                        "SELECT * FROM promotion_items pi " +
+                                "JOIN promotion pro ON pro.Promo_ID = pi.Promo_ID " +
+                                "WHERE pro.Active = 1 AND pi.Item_ID = ? AND pi.Qty <= ? " +
+                                "ORDER BY pi.Qty DESC LIMIT 1")) {
+            pstmt.setString(1, itemId);
+            pstmt.setDouble(2, itemQty);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    if ("PERCENTAGE".equals(rs.getString("DiscType"))) {
+                        discount = (salePrice / 100) * rs.getDouble("Discount");
+                    } else {
+                        discount = rs.getDouble("Discount");
+                    }
+                }
+            }
+            System.out.println("== ReadPromotion -> ItemID: " + itemId + " | SalePrice: " + salePrice + " | ItemQty: "
+                    + itemQty + " | Discount: " + discount);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return discount;
     }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        String itemId;
-        int quantity = 0;
-
-        // Prompt the user for item ID
         System.out.print("Enter item ID: ");
-        itemId = scanner.nextLine();
+        String itemId = scanner.nextLine();
 
-        // Prompt the user for item quantity
+        int quantity = 0;
         while (true) {
             try {
                 System.out.print("Enter item quantity: ");
                 quantity = Integer.parseInt(scanner.nextLine());
-                break; // Exit loop if input is valid
+                break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid integer for item quantity.");
             }
         }
 
-        // Create an InvoiceItems object (placeholder values for name and age)
         InvoiceItems item = new InvoiceItems(itemId, "Item_Name", 0, 0.0);
-
-        // Calculate the discounted price
         double discountedPrice = item.calculateWholesaleDiscount(itemId, quantity);
-
-        // Output the total price after discount
         System.out.println("Total price after discount: " + discountedPrice);
 
-        // Close the scanner
+        item.addIntoSaleJtble();
+
         scanner.close();
     }
 }
