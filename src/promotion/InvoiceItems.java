@@ -100,7 +100,7 @@ public class InvoiceItems {
                     if ("PERCENTAGE".equals(rs.getString("DiscType"))) {
                         discount = (salePrice * itemQty) * (rs.getDouble("Discount") / 100);
                     } else {
-                        discount = rs.getDouble("Discount");
+                        discount = rs.getDouble("Discount") * itemQty;
                     }
                 }
             }
