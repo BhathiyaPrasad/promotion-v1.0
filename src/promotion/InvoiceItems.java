@@ -100,7 +100,7 @@ public class InvoiceItems {
                     if ("PERCENTAGE".equals(rs.getString("DiscType"))) {
                         discount = (salePrice * itemQty) * (rs.getDouble("Discount") / 100);
                     } else {
-                        discount = rs.getDouble("Discount") * itemQty;
+                        discount = rs.getDouble("Discount");
                     }
                 }
             }
@@ -112,18 +112,19 @@ public class InvoiceItems {
         return discount;
     }
 
-    public void addIntoSaleJtble() {
-        String item_Id = "00100";
-        double salePrice = 2500.00;
-        double itemQty = 20;
+    // public void addIntoSaleJtble() {
+    // String item_Id = "00100";
+    // double salePrice = 2500.00;
+    // double itemQty = 20;
 
-        // Call into Promotion method
-        double givenDiscount = readPromotion(item_Id, salePrice, itemQty);
+    // // Call into Promotion method
+    // double givenDiscount = readPromotion(item_Id, salePrice, itemQty);
 
-        System.out.println("== AddIntoSaleJtble -> Item_ID: " + item_Id + " | SalePrice: " + salePrice + " | ItemQty: "
-                + itemQty + " | Discount: " + givenDiscount);
-        // Normal process
-    }
+    // System.out.println("== AddIntoSaleJtble -> Item_ID: " + item_Id + " |
+    // SalePrice: " + salePrice + " | ItemQty: "
+    // + itemQty + " | Discount: " + givenDiscount);
+    // // Normal process
+    // }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -145,7 +146,7 @@ public class InvoiceItems {
         double discountedPrice = item.calculateWholesaleDiscount(item_Id, quantity);
         System.out.println("Total price after discount: " + discountedPrice);
 
-        item.addIntoSaleJtble();
+        // item.addIntoSaleJtble();
 
         scanner.close();
     }
