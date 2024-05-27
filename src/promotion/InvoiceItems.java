@@ -60,9 +60,9 @@ public class InvoiceItems {
         return "InvoiceItems{id=" + id + ", name='" + name + "', age=" + age + ", price=" + price + "}";
     }
 
-    public double calculateWholesaleDiscount(String itemId, int quantity) {
-        double itemPrice = getItemPriceFromDatabase(itemId);
-        System.out.println("Item_ID: " + itemId + " Item_Price: " + itemPrice);
+    public double calculateWholesaleDiscount(String item_Id, int quantity) {
+        double itemPrice = getItemPriceFromDatabase(item_Id);
+        System.out.println("Item_ID: " + item_Id + " Item_Price: " + itemPrice);
         double discountRate = getDiscountRate(quantity);
         double totalPrice = itemPrice * quantity;
         double discount = totalPrice * discountRate;
@@ -70,11 +70,11 @@ public class InvoiceItems {
         return discountedPrice;
     }
 
-    private double getItemPriceFromDatabase(String itemId) {
+    private double getItemPriceFromDatabase(String item_Id) {
         double itemPrice = 0.0;
         try (Connection conn = database.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement("SELECT Sales_Price FROM items WHERE item_id = ?")) {
-            pstmt.setString(1, itemId);
+            pstmt.setString(1, item_Id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     itemPrice = rs.getDouble("Sales_Price");
@@ -107,19 +107,19 @@ public class InvoiceItems {
     }
 
     public void addIntoSaleJtble() {
-        String itemId = "00100";
+        String item_Id = "00100";
         double salePrice = 2500.00;
         double itemQty = 20;
 
         // Call into Promotion method
-        double givenDiscount = readPromotion(itemId, salePrice, itemQty);
+        double givenDiscount = readPromotion(item_Id, salePrice, itemQty);
 
-        System.out.println("== AddIntoSaleJtble -> ItemID: " + itemId + " | SalePrice: " + salePrice + " | ItemQty: "
+        System.out.println("== AddIntoSaleJtble -> Item_ID: " + item_Id + " | SalePrice: " + salePrice + " | ItemQty: "
                 + itemQty + " | Discount: " + givenDiscount);
         // Normal process
     }
 
-    private double readPromotion(String itemId, double salePrice, double itemQty) {
+    private double readPromotion(String item_Id, double salePrice, double itemQty) {
         double discount = 0.0;
         try (Connection conn = database.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(
@@ -127,7 +127,7 @@ public class InvoiceItems {
                                 "JOIN promotion pro ON pro.Promo_ID = pi.Promo_ID " +
                                 "WHERE pro.Active = 1 AND pi.Item_ID = ? AND pi.Qty <= ? " +
                                 "ORDER BY pi.Qty DESC LIMIT 1")) {
-            pstmt.setString(1, itemId);
+            pstmt.setString(1, item_Id);
             pstmt.setDouble(2, itemQty);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -138,7 +138,7 @@ public class InvoiceItems {
                     }
                 }
             }
-            System.out.println("== ReadPromotion -> ItemID: " + itemId + " | SalePrice: " + salePrice + " | ItemQty: "
+            System.out.println("== ReadPromotion -> Item_ID: " + item_Id + " | SalePrice: " + salePrice + " | ItemQty: "
                     + itemQty + " | Discount: " + discount);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,7 +149,7 @@ public class InvoiceItems {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter item ID: ");
-        String itemId = scanner.nextLine();
+        String item_Id = scanner.nextLine();
 
         int quantity = 0;
         while (true) {
@@ -162,8 +162,8 @@ public class InvoiceItems {
             }
         }
 
-        InvoiceItems item = new InvoiceItems(itemId, "Item_Name", 0, 0.0);
-        double discountedPrice = item.calculateWholesaleDiscount(itemId, quantity);
+        InvoiceItems item = new InvoiceItems(item_Id, "Item_Name", 0, 0.0);
+        double discountedPrice = item.calculateWholesaleDiscount(item_Id, quantity);
         System.out.println("Total price after discount: " + discountedPrice);
 
         item.addIntoSaleJtble();
