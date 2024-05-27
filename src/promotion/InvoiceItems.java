@@ -112,20 +112,6 @@ public class InvoiceItems {
         return discount;
     }
 
-    // public void addIntoSaleJtble() {
-    // String item_Id = "00100";
-    // double salePrice = 2500.00;
-    // double itemQty = 20;
-
-    // // Call into Promotion method
-    // double givenDiscount = readPromotion(item_Id, salePrice, itemQty);
-
-    // System.out.println("== AddIntoSaleJtble -> Item_ID: " + item_Id + " |
-    // SalePrice: " + salePrice + " | ItemQty: "
-    // + itemQty + " | Discount: " + givenDiscount);
-    // // Normal process
-    // }
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter item ID: ");
@@ -145,8 +131,6 @@ public class InvoiceItems {
         InvoiceItems item = new InvoiceItems(item_Id, "Item_Name", 0, 0.0);
         double discountedPrice = item.calculateWholesaleDiscount(item_Id, quantity);
         System.out.println("Total price after discount: " + discountedPrice);
-
-        // item.addIntoSaleJtble();
 
         scanner.close();
     }
