@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main.Main",
+            "projectName": "promotion-v1.0_566a0354"
+        },
+        {
+            "type": "java",
+            "name": "database",
+            "request": "launch",
+            "mainClass": "connection.database",
+            "projectName": "promotion-v1.0_566a0354"
+        },
+        {
+            "type": "java",
+            "name": "InvoiceItems",
+            "request": "launch",
+            "mainClass": "promotion.InvoiceItems",
+            "projectName": "promotion-v1.0_566a0354"
+        }
+    ]
+}
