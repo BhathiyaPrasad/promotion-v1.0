@@ -63,9 +63,8 @@ public class InvoiceItems {
     public double calculateWholesaleDiscount(String item_Id, int quantity) {
         double itemPrice = getItemPriceFromDatabase(item_Id);
         System.out.println("Item_ID: " + item_Id + " Item_Price: " + itemPrice);
-        double discountRate = getDiscountRate(quantity);
+        double discount = readPromotion(item_Id, itemPrice, quantity);
         double totalPrice = itemPrice * quantity;
-        double discount = totalPrice * discountRate;
         double discountedPrice = totalPrice - discount;
         return discountedPrice;
     }
@@ -86,39 +85,6 @@ public class InvoiceItems {
         return itemPrice;
     }
 
-    private double getDiscountRate(int quantity) {
-        if (quantity == 1) {
-            return 0.0; // 0% discount
-        } else if (quantity == 2) {
-            return 0.05; // 5% discount
-        } else if (quantity == 3) {
-            return 0.10; // 10% discount
-        } else if (quantity >= 4 && quantity <= 5) {
-            return 0.15; // 15% discount
-        } else if (quantity >= 6 && quantity <= 10) {
-            return 0.20; // 20% discount
-        } else if (quantity >= 11 && quantity <= 25) {
-            return 0.25; // 25% discount
-        } else if (quantity > 25) {
-            return 0.40; // 40% discount
-        } else {
-            return 0.0; // No discount
-        }
-    }
-
-    public void addIntoSaleJtble() {
-        String item_Id = "00100";
-        double salePrice = 2500.00;
-        double itemQty = 20;
-
-        // Call into Promotion method
-        double givenDiscount = readPromotion(item_Id, salePrice, itemQty);
-
-        System.out.println("== AddIntoSaleJtble -> Item_ID: " + item_Id + " | SalePrice: " + salePrice + " | ItemQty: "
-                + itemQty + " | Discount: " + givenDiscount);
-        // Normal process
-    }
-
     private double readPromotion(String item_Id, double salePrice, double itemQty) {
         double discount = 0.0;
         try (Connection conn = database.getConnection();
@@ -132,9 +98,9 @@ public class InvoiceItems {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     if ("PERCENTAGE".equals(rs.getString("DiscType"))) {
-                        discount = (salePrice / 100) * rs.getDouble("Discount");
+                        discount = (salePrice * itemQty) * (rs.getDouble("Discount") / 100);
                     } else {
-                        discount = rs.getDouble("Discount");
+                        discount = rs.getDouble("Discount") * itemQty;
                     }
                 }
             }
@@ -144,6 +110,19 @@ public class InvoiceItems {
             e.printStackTrace();
         }
         return discount;
+    }
+
+    public void addIntoSaleJtble() {
+        String item_Id = "00100";
+        double salePrice = 2500.00;
+        double itemQty = 20;
+
+        // Call into Promotion method
+        double givenDiscount = readPromotion(item_Id, salePrice, itemQty);
+
+        System.out.println("== AddIntoSaleJtble -> Item_ID: " + item_Id + " | SalePrice: " + salePrice + " | ItemQty: "
+                + itemQty + " | Discount: " + givenDiscount);
+        // Normal process
     }
 
     public static void main(String[] args) {
