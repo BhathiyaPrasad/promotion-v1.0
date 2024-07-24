@@ -4,9 +4,9 @@ This project manages invoice items and calculates discounts based on promotional
 
 ## Features
 
-- Retrieve item price from the database
-- Calculate wholesale discount based on quantity
-- Integrate with promotional discounts from a database
+- Retrieve item price from the database.
+- Calculate wholesale discount based on quantity.
+- Integrate with promotional discounts from a database.
 
 ## Getting Started
 
